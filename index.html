@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#10263f">
+<title>Municípios a até 200 km de Paulo Afonso • Levantamento geográfico</title>
+<style>
+:root{--navy:#10263f;--navy2:#1e4165;--ink:#1f3042;--muted:#60778b;--teal:#087f8c;--blue:#eaf3f9;--line:#dce5ef;--light:#f4f7fb;--white:#fff;--green:#15803d;--red:#ad3434}
+*{box-sizing:border-box}body{margin:0;background:var(--light);color:var(--ink);font:15px/1.55 system-ui,-apple-system,Segoe UI,Arial,sans-serif}
+a{color:#0b6a99}button,input,select{font:inherit}button{cursor:pointer}.hero{background:linear-gradient(120deg,#10263f,#214e73);color:#fff;padding:34px max(5vw,24px) 42px}
+.container{max-width:1340px;margin:auto;padding:0 24px}.topline{text-transform:uppercase;font-size:12px;letter-spacing:.17em;color:#add5e8;font-weight:750;margin-bottom:10px}
+h1{font-size:clamp(27px,3.4vw,44px);margin:0 0 10px;line-height:1.16;letter-spacing:-.025em}.hero p{color:#e2eef6;margin:0;max-width:900px}.hero strong{color:white}
+.panel{background:white;border:1px solid var(--line);border-radius:16px;box-shadow:0 4px 14px #14334b0b}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:-24px;position:relative}.metric{padding:21px 22px;min-height:109px}.metric .kicker{color:var(--muted);font-size:12px;letter-spacing:.055em;text-transform:uppercase;font-weight:750}.metric .value{font-size:30px;line-height:1.4;font-weight:800;color:var(--navy);font-variant-numeric:tabular-nums}.metric .suffix{font-size:12px;color:var(--muted)}
+.notice{padding:14px 16px;background:#e7f5fb;border-left:4px solid #0d8498;border-radius:8px;margin:18px 0;line-height:1.5}.notice.error{background:#fdf1f1;border-color:#c85252}.notice.ok{background:#eefaf1;border-color:#3a9856}
+.section{margin:20px 0}.section h2{margin:0;font-size:19px;line-height:1.3;color:var(--navy)}.sectionhead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-bottom:14px}
+.footnote{color:var(--muted);font-size:12px;margin:0}.insight{display:grid;grid-template-columns: minmax(360px,1.15fr) minmax(300px,.85fr);gap:18px}.content{padding:20px}.legend{display:flex;flex-wrap:wrap;gap:7px 12px;margin-top:12px;font-size:12px;color:var(--muted)}.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px}
+#map{display:block;width:100%;max-width:480px;margin:0 auto;height:auto;background:#fafcff;border:1px solid #e2eaf3;border-radius:10px}#ufBreakdown{display:grid;grid-template-columns:1fr 1fr;gap:10px}.ufpill{padding:13px;border:1px solid #e2eaf3;border-radius:10px;background:#f9fbfd}.ufpill span{font-size:13px;color:var(--muted)}.ufpill b{display:block;font-size:23px;color:var(--navy)}.bandgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px}.band{border-radius:9px;background:#eef5fa;padding:10px;text-align:center}.band b{display:block;font-size:21px;color:var(--navy)}.band span{font-size:11px;color:var(--muted)}
+.controls{display:flex;align-items:end;gap:12px;flex-wrap:wrap}.field{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:700;color:#485d71}.field input,.field select{border:1px solid #bccddc;border-radius:9px;background:white;padding:10px 12px;min-height:43px;color:var(--ink);outline-offset:2px}.field input[type=search]{min-width:280px}.field input[type=range]{accent-color:var(--teal);min-width:160px}.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;background:#087c91;border:0;border-radius:9px;color:white;padding:11px 15px;min-height:43px;font-weight:750;white-space:nowrap}.btn:hover{background:#066379}.btn.ghost{background:white;color:#164363;border:1px solid #a7c8d7}.btn.ghost:hover{background:#eff6fa}.btn:disabled{opacity:.45;cursor:not-allowed}
+.tablewrap{border:1px solid var(--line);border-radius:12px;overflow:auto;max-height:650px}.citytable{width:100%;border-collapse:collapse;text-align:left;font-variant-numeric:tabular-nums}.citytable th{position:sticky;top:0;z-index:1;background:#173952;color:white;text-transform:uppercase;letter-spacing:.03em;font-size:11px;white-space:nowrap;padding:12px 13px}.citytable td{padding:9px 13px;border-bottom:1px solid #e7edf3;white-space:nowrap;font-size:13px}.citytable tr:nth-child(even){background:#f6f9fc}.citytable tr:hover{background:#e9f4fa}.citytable .city{font-weight:700;color:#243b54}.km{font-weight:750;color:#0a7589}.n{color:#698092}.sourceinfo{display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-top:12px}.sourceinfo a{font-size:12px}.loading{display:flex;align-items:center;gap:10px}.spinner{width:18px;height:18px;border-radius:50%;border:2px solid #bcd6e1;border-top-color:#057f95;animation:spin .75s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+footer{max-width:1340px;margin:26px auto;padding:0 24px 30px;color:#687b8c;font-size:12px}footer p{margin:6px 0}.smallcaps{color:#50667c;text-transform:uppercase;letter-spacing:.08em;font-size:11px;font-weight:800}#upload{display:none}.uploadlabel{cursor:pointer}
+@media(max-width:880px){.metrics{grid-template-columns:repeat(2,1fr)}.insight{grid-template-columns:1fr}.metric .value{font-size:25px}.container{padding:0 14px}.hero{padding:26px 16px 40px}.content{padding:16px}.controls{align-items:stretch}.field input[type=search]{min-width:190px;width:100%}.field{flex:1 1 180px}}@media(max-width:450px){.metrics{gap:8px}.metric{padding:13px 14px}.bandgrid{grid-template-columns:repeat(2,1fr)}.metric .value{font-size:23px}#ufBreakdown{grid-template-columns:1fr 1fr}h1{font-size:28px}}
+@media print{body{background:white}.hero{background:white;color:black;padding:12px}.hero p{color:#333}.hero .topline{color:#777}.hero strong{color:#000}.metrics{margin-top:0}.panel{box-shadow:none}.controls,.notice,.btn,.sourceinfo{display:none}.tablewrap{max-height:none;overflow:visible}.citytable th{color:black;background:#efefef}#map{max-width:340px} .insight{break-after:page}}
+</style>
+</head>
+<body>
+<header class="hero"><div class="container">
+<div class="topline">Projeto Viagens · levantamento territorial · 01/11/2026</div>
+<h1>Todas as cidades em um raio de 200 km<br>de Paulo Afonso/BA</h1>
+<p>Listagem de <strong>sedes municipais</strong> localizadas a até <strong>200 km em linha reta</strong> do ponto de referência em Paulo Afonso. A busca é nacional e inclui municípios independentemente do estado.</p>
+</div></header>
+<main class="container">
+<section class="metrics" aria-label="Resumo do levantamento">
+<div class="panel metric"><div class="kicker">Municípios encontrados</div><div id="total" class="value">—</div><div class="suffix">Incluindo Paulo Afonso</div></div>
+<div class="panel metric"><div class="kicker">Estados alcançados</div><div id="ufs" class="value">—</div><div class="suffix">A busca percorre toda a base nacional</div></div>
+<div class="panel metric"><div class="kicker">Raio pesquisado</div><div class="value">200 km</div><div class="suffix">Distância geográfica, não rodoviária</div></div>
+<div class="panel metric"><div class="kicker">Municípios na base</div><div id="base" class="value">—</div><div class="suffix">Registros georreferenciados analisados</div></div>
+</section>
+<div id="status" class="notice loading" role="status"><span class="spinner"></span><span>Carregando a base nacional para calcular e conferir cada cidade...</span></div>
+<section class="insight section">
+<div class="panel content"><div class="sectionhead"><div><h2>Distribuição geográfica</h2><p class="footnote">Diagrama proporcional: origem no centro, anéis de 50, 100, 150 e 200 km.</p></div></div>
+<svg id="map" viewBox="0 0 500 500" role="img" aria-label="Gráfico geográfico das cidades dentro de 200 quilômetros"><g id="mapStatic"><circle cx="250" cy="250" r="207" fill="#f1f8fc" stroke="#9db9cd" stroke-width="2"/><circle cx="250" cy="250" r="155.25" fill="none" stroke="#b7cbdc" stroke-dasharray="4 5"/><circle cx="250" cy="250" r="103.5" fill="none" stroke="#b7cbdc" stroke-dasharray="4 5"/><circle cx="250" cy="250" r="51.75" fill="none" stroke="#b7cbdc" stroke-dasharray="4 5"/><line x1="43" y1="250" x2="457" y2="250" stroke="#c1d2e1"/><line x1="250" y1="43" x2="250" y2="457" stroke="#c1d2e1"/><g fill="#6c839a" font-family="system-ui,Arial" font-size="12"><text x="257" y="194">50 km</text><text x="257" y="142">100 km</text><text x="257" y="90">150 km</text><text x="257" y="30">N</text><text x="257" y="480">S</text><text x="463" y="255">L</text><text x="22" y="255">O</text></g></g><g id="plot"></g><circle cx="250" cy="250" r="6" fill="#10263f" stroke="white" stroke-width="2"/><text x="261" y="267" font-size="11" font-family="system-ui,Arial" font-weight="800" fill="#10263f">Paulo Afonso</text></svg>
+<div id="legend" class="legend"></div><p class="footnote" style="margin-top:12px">Passe o mouse sobre os pontos para consultar o nome e a distância. O desenho é esquemático e não substitui um mapa viário.</p>
+</div>
+<div class="panel content"><div class="sectionhead"><div><h2>Quantidade por estado</h2><p class="footnote">Contagem sem filtro, a partir da mesma lista geográfica.</p></div></div>
+<div id="ufBreakdown"><div class="ufpill">Aguardando carregamento...</div></div>
+<div style="margin-top:22px"><div class="smallcaps">Faixas de distância</div><div class="bandgrid" id="bands"></div></div>
+<div class="notice" style="margin-bottom:0"><strong>Como interpretar:</strong> o município entra na lista quando o ponto que representa sua sede está dentro de 200 km. Uma parte rural de município com sede fora do círculo não altera esse critério.</div>
+</div>
+</section>
+<section class="panel section content" id="lista"><div class="sectionhead"><div><h2>Relação completa em ordem crescente</h2><p class="footnote">Pesquise por cidade, use o filtro estadual ou ajuste o raio para explorar destinos mais próximos.</p></div><div class="smallcaps" id="countshown">Aguardando dados</div></div>
+<div class="controls">
+<label class="field">Buscar município<input id="search" type="search" placeholder="Ex.: Glória, Piranhas, Jeremoabo" autocomplete="off"></label>
+<label class="field">Estado<select id="ufFilter"><option value="">Todos os estados</option></select></label>
+<label class="field">Raio aplicado: <span id="radiusLabel">200 km</span><input id="radius" type="range" min="10" max="200" value="200" step="5"></label>
+<button class="btn" id="download" disabled>Baixar tabela CSV para Excel</button>
+<button class="btn ghost" id="geojson" disabled>Baixar GeoJSON</button>
+<label class="btn ghost uploadlabel" for="upload">Abrir base CSV local</label><input type="file" id="upload" accept=".csv,text/csv,text/plain">
+</div>
+<div style="height:15px"></div>
+<div class="tablewrap"><table class="citytable"><thead><tr><th>Ordem</th><th>Município</th><th>UF</th><th>Distância (km)</th><th>Código IBGE</th><th>Latitude</th><th>Longitude</th></tr></thead><tbody id="rows"><tr><td colspan="7">Carregando a relação nacional...</td></tr></tbody></table></div>
+<div class="sourceinfo"><p class="footnote" id="dataNote">A tabela usa 200 km exatos antes do arredondamento para exibição.</p><a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/kelvins/municipios-brasileiros/master/csv/municipios.csv">Consultar arquivo original de municípios ↗</a></div>
+</section>
+<section class="panel section content"><h2>Metodologia e fontes</h2>
+<p><strong>Ponto inicial:</strong> sede de Paulo Afonso, latitude −9,3983° e longitude −38,2216°, referência na base empregada. <strong>Raio:</strong> 200 quilômetros. <strong>Distância:</strong> fórmula de Haversine, raio médio da Terra de 6.371,0088 km. O sistema calcula o valor sem arredondar para classificar a cidade e só depois exibe duas casas decimais.</p>
+<p><strong>Base:</strong> conjunto aberto “Municípios Brasileiros”, com códigos IBGE, nomes e coordenadas de municípios, consultado em <a target="_blank" rel="noopener" href="https://github.com/kelvins/municipios-brasileiros">GitHub / kelvins</a>. A classificação de sedes municipais segue o conceito territorial documentado pelo <a target="_blank" rel="noopener" href="https://www.ibge.gov.br/geociencias/organizacao-do-territorio/estrutura-territorial/27385-localidades">IBGE – Localidades do Brasil</a>. O repositório é uma base derivada, não o download oficial do produto de localidades do IBGE.</p>
+<p><strong>Limitação para viagens:</strong> quilômetros em linha reta não são quilômetros percorridos na estrada. Lagos, barragens, rios, rodovias e desvios podem tornar o trajeto real muito maior. Para viagens, a distância e o tempo rodoviários devem ser apurados separadamente.</p>
+<p class="footnote"><strong>Reprodutibilidade:</strong> os valores são gerados diretamente no navegador a partir de todas as linhas do CSV público; o código e a metodologia estão dentro deste arquivo HTML. É necessária internet no primeiro carregamento, a menos que você importe um arquivo CSV previamente salvo.</p>
+</section>
+</main><footer><p>Relatório interativo de levantamento geográfico — Projeto Viagens · Preparado em 1º de novembro de 2026.</p><p>Use o botão “Baixar tabela CSV para Excel” após o carregamento para salvar a listagem integral em um arquivo editável no Windows.</p></footer>
+<script>
+(function(){
+'use strict';
+const ORIGIN={lat:-9.3983,lon:-38.2216,name:'Paulo Afonso',uf:'BA'},LIMIT=200,R=6371.0088;
+const UF={11:['RO','Rondônia'],12:['AC','Acre'],13:['AM','Amazonas'],14:['RR','Roraima'],15:['PA','Pará'],16:['AP','Amapá'],17:['TO','Tocantins'],21:['MA','Maranhão'],22:['PI','Piauí'],23:['CE','Ceará'],24:['RN','Rio Grande do Norte'],25:['PB','Paraíba'],26:['PE','Pernambuco'],27:['AL','Alagoas'],28:['SE','Sergipe'],29:['BA','Bahia'],31:['MG','Minas Gerais'],32:['ES','Espírito Santo'],33:['RJ','Rio de Janeiro'],35:['SP','São Paulo'],41:['PR','Paraná'],42:['SC','Santa Catarina'],43:['RS','Rio Grande do Sul'],50:['MS','Mato Grosso do Sul'],51:['MT','Mato Grosso'],52:['GO','Goiás'],53:['DF','Distrito Federal']};
+const COLOR={BA:'#cf7a36',AL:'#2c86bf',PE:'#9a63a0',SE:'#1b967f',PB:'#ce4f73',CE:'#79823b'};
+const URLS=[
+'https://raw.githubusercontent.com/kelvins/municipios-brasileiros/master/csv/municipios.csv',
+'https://cdn.jsdelivr.net/gh/kelvins/municipios-brasileiros@master/csv/municipios.csv'
+];
+const $=id=>document.getElementById(id);
+let all=[],selected=[],rawCount=0;
+function toRad(v){return v*Math.PI/180}
+function hav(lat,lon){const da=toRad(lat-ORIGIN.lat),db=toRad(lon-ORIGIN.lon);const x=Math.sin(da/2)**2+Math.cos(toRad(ORIGIN.lat))*Math.cos(toRad(lat))*Math.sin(db/2)**2;return 2*R*Math.atan2(Math.sqrt(x),Math.sqrt(Math.max(0,1-x)))}
+function normalize(s){return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()}
+function fmt(v,d=2){return v.toLocaleString('pt-BR',{minimumFractionDigits:d,maximumFractionDigits:d})}
+function escapeHtml(t){return String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function status(message,kind='ok',loading=false){$('status').className='notice '+kind+(loading?' loading':'');$('status').innerHTML=(loading?'<span class="spinner"></span>':'')+'<span>'+escapeHtml(message)+'</span>'}
+function parseCsv(txt){
+const lines=txt.replace(/^\uFEFF/,'').trim().split(/\r?\n/);const header=lines.shift().split(',').map(s=>s.trim());
+const index=n=>header.indexOf(n);
+const id=index('codigo_ibge'),nome=index('nome'),lat=index('latitude'),lon=index('longitude'),uf=index('codigo_uf');
+if([id,nome,lat,lon,uf].some(x=>x<0))throw Error('O CSV precisa conter codigo_ibge, nome, latitude, longitude e codigo_uf.');
+const result=[];
+for(const line of lines){if(!line.trim())continue;const a=line.split(',');const la=Number(a[lat]),lo=Number(a[lon]);if(!Number.isFinite(la)||!Number.isFinite(lo))continue;
+const map=UF[Number(a[uf])];if(!map)continue;
+const d=hav(la,lo);
+if(d<=LIMIT+1e-9)result.push({code:a[id],name:a[nome].trim(),lat:la,lon:lo,uf:map[0],estado:map[1],d});
+}
+return {result,records:lines.filter(x=>x.trim()).length};
+}
+function receive(txt,originLabel){
+const data=parseCsv(txt);if(data.records<5000)throw Error('O arquivo tem poucos registros para representar todos os municípios brasileiros.');
+rawCount=data.records;all=data.result.sort((a,b)=>a.d-b.d||a.name.localeCompare(b.name,'pt-BR'));all.forEach((o,i)=>o.rank=i+1);
+$('total').textContent=fmt(all.length,0);$('ufs').textContent=new Set(all.map(x=>x.uf)).size;$('base').textContent=fmt(rawCount,0);
+$('ufFilter').innerHTML='<option value="">Todos os estados</option>'+[...new Set(all.map(x=>x.uf))].sort().map(u=>'<option value="'+u+'">'+u+' — '+UF[Object.keys(UF).find(k=>UF[k][0]===u)][1]+'</option>').join('');
+$('download').disabled=false;$('geojson').disabled=false;
+status('Base integral carregada e analisada: '+fmt(rawCount,0)+' municípios consultados; '+fmt(all.length,0)+' sedes dentro de 200 km. Fonte: '+originLabel,'ok');
+renderSummary();renderMap();applyFilters();
+}
+function renderSummary(){
+const counts={};all.forEach(c=>counts[c.uf]=(counts[c.uf]||0)+1);
+$('ufBreakdown').innerHTML=Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([uf,n])=>'<div class="ufpill"><span><i class="dot" style="background:'+ (COLOR[uf]||'#5b7187') +'"></i>'+escapeHtml(uf)+'</span><b>'+n+'</b><span>'+escapeHtml(Object.values(UF).find(x=>x[0]===uf)[1])+'</span></div>').join('');
+const bands=[[0,50],[50,100],[100,150],[150,200]];
+$('bands').innerHTML=bands.map(([min,max])=>'<div class="band"><b>'+all.filter(x=>x.d>=min&&(max===200?x.d<=max:x.d<max)).length+'</b><span>'+min+'–'+max+' km</span></div>').join('');
+$('legend').innerHTML=Object.keys(counts).sort().map(uf=>'<span><i class="dot" style="background:'+(COLOR[uf]||'#5b7187')+'"></i>'+uf+'</span>').join('');
+}
+function renderMap(){
+const radius=207/200;
+$('plot').innerHTML=all.filter(x=>x.d>.3).map(o=>{
+const x=250+(o.lon-ORIGIN.lon)*Math.cos(toRad((o.lat+ORIGIN.lat)/2))*111.195*radius;
+const y=250-(o.lat-ORIGIN.lat)*111.195*radius;
+return '<circle cx="'+fmtraw(x)+'" cy="'+fmtraw(y)+'" r="3.25" fill="'+(COLOR[o.uf]||'#768aa0')+'" stroke="white" stroke-width="0.6" opacity=".87"><title>'+escapeHtml(o.name+' / '+o.uf+' — '+fmt(o.d)+' km')+'</title></circle>';
+}).join('');
+}
+function fmtraw(n){return n.toFixed(3)}
+function applyFilters(){
+const q=normalize($('search').value.trim()),uf=$('ufFilter').value,r=Number($('radius').value);
+$('radiusLabel').textContent=r+' km';
+selected=all.filter(x=>x.d<=r+1e-9&&(!uf||x.uf===uf)&&(!q||normalize(x.name).includes(q)||normalize(x.estado).includes(q)||x.code.includes(q)));
+$('countshown').textContent=fmt(selected.length,0)+' cidades exibidas de '+fmt(all.length,0);
+$('rows').innerHTML=selected.length?selected.map(x=>'<tr><td class="n">'+x.rank+'</td><td class="city">'+escapeHtml(x.name)+'</td><td>'+x.uf+'</td><td class="km">'+fmt(x.d)+'</td><td>'+escapeHtml(x.code)+'</td><td>'+x.lat.toFixed(5).replace('.',',')+'</td><td>'+x.lon.toFixed(5).replace('.',',')+'</td></tr>').join(''):'<tr><td colspan="7">Nenhum município encontrado para os filtros selecionados.</td></tr>';
+}
+function download(fileName,mime,text){const blob=new Blob([text],{type:mime}),url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=fileName;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000)}
+function exportCsv(){
+const header='Ordem;Município;UF;Estado;Distância em linha reta (km);Código IBGE;Latitude;Longitude';
+const data=selected.map(x=>[x.rank,x.name,x.uf,x.estado,fmt(x.d),x.code,x.lat.toFixed(6).replace('.',','),x.lon.toFixed(6).replace('.',',')].join(';')).join('\r\n');
+const tag=(selected.length===all.length?'completo':'filtrado');
+download('cidades_raio_paulo_afonso_'+tag+'.csv','text/csv;charset=utf-8','\uFEFF'+header+'\r\n'+data+'\r\n');
+}
+function exportGeojson(){const features=selected.map(x=>({type:'Feature',properties:{nome:x.name,uf:x.uf,estado:x.estado,ibge:x.code,distancia_km:Math.round(x.d*100)/100},geometry:{type:'Point',coordinates:[x.lon,x.lat]}}));download('cidades_raio_paulo_afonso.geojson','application/geo+json;charset=utf-8',JSON.stringify({type:'FeatureCollection',features},null,2))}
+$('search').addEventListener('input',applyFilters);$('ufFilter').addEventListener('change',applyFilters);$('radius').addEventListener('input',applyFilters);
+$('download').addEventListener('click',exportCsv);$('geojson').addEventListener('click',exportGeojson);
+$('upload').addEventListener('change',async event=>{const file=event.target.files&&event.target.files[0];if(!file)return;try{receive(await file.text(),'arquivo local '+file.name)}catch(e){status('Não foi possível ler a base selecionada: '+e.message,'error')} });
+async function load(){let lastErr='';for(const url of URLS){try{const res=await fetch(url,{cache:'no-cache',signal:AbortSignal.timeout(17000)});if(!res.ok)throw Error('HTTP '+res.status);const txt=await res.text();receive(txt,'repositório público Municípios Brasileiros');return;}catch(e){lastErr=e.message||String(e)}}
+status('Não foi possível carregar automaticamente a base nacional. Confira a conexão com a internet e atualize a página. Como alternativa, abra o arquivo CSV de municípios pelo link no rodapé da tabela e use “Abrir base CSV local”. Detalhe: '+lastErr,'error');$('rows').innerHTML='<tr><td colspan="7">A lista completa requer carregamento da base de municípios. Nenhuma contagem parcial será apresentada como se fosse completa.</td></tr>';
+}
+load();
+})();
+</script>
+</body>
+</html>

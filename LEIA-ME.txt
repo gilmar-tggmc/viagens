@@ -1,0 +1,31 @@
+PROJETO VIAGENS | PUBLICAÇÃO NO GITHUB PAGES
+
+Este pacote publica o levantamento de municípios num raio de 200 km de Paulo Afonso/BA.
+
+ARQUIVOS
+- index.html: página interativa completa (HTML, CSS e JavaScript).
+- .nojekyll: indica ao GitHub Pages que não é necessário processar o site com Jekyll.
+
+PUBLICAÇÃO (GITHUB)
+1. Entre em https://github.com e crie um repositório PÚBLICO chamado viagens.
+2. No repositório, escolha Add file > Upload files.
+3. Envie index.html e .nojekyll, mantendo os dois na raiz do repositório.
+   (Se o navegador não permitir carregar .nojekyll, o index.html é suficiente para este site.)
+4. Confirme (Commit changes).
+5. Abra Settings > Pages.
+6. Em Build and deployment > Source, selecione Deploy from a branch.
+7. Escolha branch main, pasta /(root), e Save.
+8. No mesmo painel Pages, encontre o endereço publicado. O padrão é:
+   https://SEU-USUARIO.github.io/viagens/
+
+OBSERVAÇÕES
+- O site é público para qualquer pessoa com o endereço.
+- A hospedagem é gratuita nas condições do GitHub Pages para repositórios públicos.
+- O HTML busca automaticamente o CSV de municípios em repositório público do GitHub e, alternativamente, na CDN jsDelivr. Portanto, o primeiro carregamento precisa de conexão à internet e depende dessas fontes externas estarem disponíveis.
+- Não é necessário banco de dados nem servidor para as funções atuais.
+- O CSV e o GeoJSON exportados contêm dados de municípios e não dados pessoais.
+- Atualizações: substitua o index.html no repositório e o site será republicado.
+
+DOCUMENTAÇÃO OFICIAL
+https://docs.github.com/pt/pages/getting-started-with-github-pages/creating-a-github-pages-site
+https://docs.github.com/pt/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site
