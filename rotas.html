@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#10263f">
+<title>Aurora Afora • Laboratório de rotas</title>
+<style>
+:root{--navy:#10263f;--navy2:#214e73;--ink:#1f3042;--muted:#66788c;--line:#dbe5ee;--light:#f3f7fa;--blue:#eaf4f9;--teal:#087f8c;--green:#16804c;--amber:#9e6400}
+*{box-sizing:border-box}body{font:14px/1.55 system-ui,-apple-system,Segoe UI,Arial,sans-serif;margin:0;background:var(--light);color:var(--ink)}
+button,input,select,textarea{font:inherit}button{cursor:pointer}button:disabled{opacity:.4;cursor:not-allowed}
+header{background:linear-gradient(120deg,var(--navy),#24577a);padding:27px max(20px,calc((100vw - 1320px)/2));color:white}
+header h1{margin:4px 0 4px;font-size:clamp(25px,3.4vw,36px);line-height:1.2}header p{margin:3px 0;color:#dcecf6;max-width:980px}
+header .brand{font-weight:750;letter-spacing:.05em;font-size:13px;color:#b2deea}
+main{max-width:1360px;margin:auto;padding:16px 20px 60px}.grid{display:grid;gap:14px}.metrics{grid-template-columns:repeat(4,minmax(0,1fr));margin:0 0 16px}
+.panel{background:white;border:1px solid var(--line);border-radius:14px;box-shadow:0 2px 12px #10263f08}.metric{padding:16px 20px}.metric b{display:block;font-size:28px;color:var(--navy);line-height:1.3}.metric span{font-size:12px;color:var(--muted)}
+.alert{padding:12px 15px;border-radius:10px;background:#e9f4fb;border:1px solid #bcdbe8;margin-bottom:16px}.alert.error{background:#fff0f0;border-color:#e6bfc1}.alert.ok{background:#eaf8ef;border-color:#b0dec4}.alert strong{color:var(--navy)}
+.section{padding:20px;margin-bottom:16px}.section h2{font-size:19px;line-height:1.2;margin:0 0 6px;color:var(--navy)}.section p{color:var(--muted);margin:0 0 10px}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.toolbar>*{flex-shrink:0}.button{border:none;border-radius:9px;padding:9px 13px;background:var(--navy2);color:white;font-weight:650}.button.secondary{color:var(--navy);background:#eaf1f5;border:1px solid #ccdae7}.button.warning{background:#fff3dc;color:#80520d;border:1px solid #e8d3a8}.button.danger{background:#fff0f0;color:#9d3434;border:1px solid #edc1c1}
+input,select,textarea{min-width:0;border:1px solid #cddbe6;background:white;border-radius:8px;padding:9px 10px;color:var(--ink)}input[type=number]{width:100%}textarea{min-height:70px;resize:vertical;width:100%}
+label{display:grid;gap:3px;font-size:12px;color:var(--muted);font-weight:650}.labelhead{color:var(--ink)}
+.filters{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px;margin-top:14px}
+.tablewrap{max-height:465px;overflow:auto;border:1px solid var(--line);border-radius:10px}table{width:100%;border-collapse:collapse;font-size:13px}thead th{position:sticky;top:0;background:#eaf1f6;z-index:1;color:#455b70;font-size:11px;text-align:left;padding:10px}tbody td{padding:9px 10px;border-bottom:1px solid #e7edf2}tbody tr:hover{background:#f4f9fc}td.number{text-align:right;font-variant-numeric:tabular-nums}.pill{border-radius:50px;padding:3px 7px;font-size:11px;white-space:nowrap;display:inline-block;background:#eef3f6;color:#52687c}.pill.done{background:#ddf3e4;color:#176a3b}.pill.partial{background:#fff2d7;color:#94600a}.pill.none{background:#eef3f6;color:#52687c}.editrow{background:#edf7fb}
+.workbench{display:grid;grid-template-columns:minmax(250px,330px) minmax(0,1fr);gap:16px}
+.fieldgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:12px 0}.fieldgrid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.editor{border:1px solid var(--line);background:#fbfdff;border-radius:12px;padding:16px}.editor h3{margin:0 0 8px;color:var(--navy);font-size:16px}.small{font-size:12px;color:var(--muted)}.mono{font-variant-numeric:tabular-nums}a{color:#0c6b9a}.note{margin-top:12px;padding:10px;border-left:3px solid #49a1bb;background:#f0f8fc;border-radius:4px;font-size:12px}
+#routeOptions button{display:block;text-align:left;width:100%;margin:5px 0}.right{margin-left:auto}.hidden{display:none!important}
+@media(max-width:900px){.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.workbench{grid-template-columns:1fr}}
+@media(max-width:600px){main{padding:12px 10px 50px}.section{padding:13px}.filters{grid-template-columns:1fr}.fieldgrid,.fieldgrid.two{grid-template-columns:repeat(2,minmax(0,1fr))}.metrics{gap:8px}.metric{padding:11px}.metric b{font-size:23px}.toolbar button{flex:1}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">☀ AURORA AFORA · LABORATÓRIO DE ROTAS · V1</div>
+  <h1>Do mapa à estrada.</h1>
+  <p>Organização das rotas de Paulo Afonso para as sedes municipais num raio de 200 km em linha reta. Distâncias rodoviárias só aparecem após pesquisa e registro — nunca são copiadas da linha reta.</p>
+</header>
+<main>
+  <div id="status" class="alert"><strong>Carregando municípios...</strong> A base geográfica será consultada na internet. Se necessário, importe o CSV original.</div>
+  <section class="grid metrics">
+    <div class="panel metric"><b id="countCities">—</b><span>Destinos (sem a origem)</span></div>
+    <div class="panel metric"><b id="countCombos">—</b><span>Combinações de destino × modalidade</span></div>
+    <div class="panel metric"><b id="countRoutes">0</b><span>Rotas alternativas cadastradas</span></div>
+    <div class="panel metric"><b id="countChecked">0</b><span>Rotas marcadas como verificadas</span></div>
+  </section>
+
+  <section class="panel section">
+    <h2>1. Base de municípios e exportação</h2>
+    <p>O cadastro de municípios usa o mesmo critério e a mesma fonte do explorador original. O status inicial de todas as modalidades é <strong>pendente</strong>. Um município poderá ter várias rotas para o mesmo meio de deslocamento.</p>
+    <div class="toolbar">
+      <button class="button" id="exportCsv" disabled>Exportar matriz CSV para Excel</button>
+      <button class="button secondary" id="exportJson">Salvar backup JSON</button>
+      <label class="button secondary" style="display:inline-block;cursor:pointer;color:#10263f">Importar backup JSON<input id="importJson" type="file" accept=".json,application/json" class="hidden"></label>
+      <label class="button secondary" style="display:inline-block;cursor:pointer;color:#10263f">Importar base CSV<input id="importCities" type="file" accept=".csv,text/csv" class="hidden"></label>
+      <button class="button secondary" id="reload">Atualizar municípios</button>
+    </div>
+    <div class="note"><strong>Dados locais:</strong> as rotas preenchidas ficam somente neste navegador e neste dispositivo. O site não tem banco de dados ou sincronização. Exporte o backup JSON após cada sessão de trabalho para não perder informações. O CSV exporta a matriz inteira para conferir no Excel.</div>
+  </section>
+
+  <section class="panel section">
+    <h2>2. Escolha um destino</h2>
+    <p>Ordem inicial por distância em linha reta, apenas para priorizar a pesquisa. Essa ordem <strong>não</strong> representa a distância por estrada.</p>
+    <div class="filters">
+      <label>Buscar município, estado ou IBGE<input id="search" placeholder="Ex.: Glória, Petrolândia, 29..."></label>
+      <label>Estado<select id="uf"><option value="">Todos os estados</option></select></label>
+      <label>Pesquisar por modalidade<select id="modeFilter"><option value="carro">Carro</option><option value="moto">Moto</option><option value="bicicleta">Bicicleta</option><option value="ape">A pé</option></select></label>
+    </div>
+    <p id="tableMeta" class="small" style="margin-top:9px">Aguardando a base.</p>
+    <div class="tablewrap">
+      <table><thead><tr><th>Ordem</th><th>Município</th><th>UF</th><th>Linha reta (km)</th><th>Rotas / status</th><th>Ação</th></tr></thead><tbody id="cityRows"><tr><td colspan="6">Carregando...</td></tr></tbody></table>
+    </div>
+  </section>
+
+  <section class="panel section" id="bench" hidden>
+    <h2>3. Registrar rotas para <span id="selectedTitle">—</span></h2>
+    <p id="selectedMeta"></p>
+    <div class="workbench">
+      <div>
+        <label>Modalidade
+          <select id="mode"><option value="carro">🚗 Carro</option><option value="moto">🏍️ Moto</option><option value="bicicleta">🚴 Bicicleta</option><option value="ape">🚶 A pé</option></select>
+        </label>
+        <h3 style="color:#10263f;font-size:15px;margin:17px 0 8px">Alternativas cadastradas</h3>
+        <div id="routeOptions"><p class="small">Ainda não existem alternativas cadastradas.</p></div>
+        <button id="newRoute" class="button" style="width:100%;margin-top:8px">+ Nova alternativa de rota</button>
+        <div class="note">Uma rota pode ser curta, rápida ou uma alternativa. A modalidade <strong>moto</strong> terá verificação própria: não vamos pressupor que todo caminho indicado para carro seja adequado ou permitido para motocicletas.</div>
+      </div>
+      <div class="editor">
+        <h3 id="formTitle">Cadastrar alternativa</h3>
+        <form id="routeForm">
+          <div class="fieldgrid two">
+            <label>Nome da alternativa<input name="nome" maxlength="95" placeholder="Ex.: Via BR-110 / trecho principal"></label>
+            <label>Prioridade da rota<select name="prioridade"><option value="">Não determinada</option><option value="mais_curta">Mais curta</option><option value="mais_rapida">Mais rápida</option><option value="alternativa">Alternativa</option></select></label>
+            <label>Status<select name="status"><option value="levantamento">Em levantamento</option><option value="estimada">Estimativa não verificada</option><option value="verificada">Verificada com fonte</option><option value="inviavel">Não disponível / inviável</option></select></label>
+            <label>Distância total (km)<input name="distancia" type="number" min="0" step="0.01" placeholder="Ainda não pesquisada"></label>
+            <label>Duração estimada (min)<input name="duracao" type="number" min="0" step="1" placeholder="Opcional"></label>
+            <label>Data da verificação<input name="data" type="date"></label>
+          </div>
+          <h3>Superfície percorrida (km)</h3>
+          <p class="small">Classifique as partes conhecidas. Se o tipo de piso não estiver identificado, registre essa extensão em “Desconhecido”; não presuma que seja asfalto.</p>
+          <div class="fieldgrid">
+            <label>Asfalto<input name="asfalto" type="number" min="0" step="0.01" placeholder="0"></label>
+            <label>Terra / chão<input name="terra" type="number" min="0" step="0.01" placeholder="0"></label>
+            <label>Outro pavimento<input name="outro" type="number" min="0" step="0.01" placeholder="0"></label>
+            <label>Desconhecido<input name="desconhecido" type="number" min="0" step="0.01" placeholder="0"></label>
+          </div>
+          <div class="fieldgrid two">
+            <label>Rodovias / vias utilizadas<textarea name="vias" placeholder="Ex.: BR-110, via municipal, acesso rural..."></textarea></label>
+            <label>Observações e restrições<textarea name="observacoes" placeholder="Trechos com lama em chuva, balsa, proibição de bicicletas, etc."></textarea></label>
+            <label>Fonte / referência (URL ou identificação)<input name="fonte" placeholder="https://... ou relatório de campo"></label>
+            <label>Confiabilidade<select name="confianca"><option value="nao_avaliada">Não avaliada</option><option value="baixa">Baixa</option><option value="media">Média</option><option value="alta">Alta</option></select></label>
+          </div>
+          <div class="toolbar">
+            <button type="submit" class="button">Salvar rota neste navegador</button>
+            <button type="button" id="deleteRoute" class="button danger hidden">Excluir alternativa</button>
+            <span class="small" id="formMessage" aria-live="polite"></span>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel section">
+    <h2>4. Regras do levantamento</h2>
+    <p>O projeto começa com Paulo Afonso, mas os arquivos são preparados para aceitar outras origens no futuro. Para cada destino, o painel cria quatro oportunidades de pesquisa: carro, moto, bicicleta e caminhada. Percursos alternativos são cadastrados separadamente, podendo ter extensão e pavimentação distintas.</p>
+    <p><strong>Classificação:</strong> 100% asfalto, 100% chão, híbrido, outro pavimento e superfície desconhecida são definidos a partir dos quilômetros cadastrados. Se qualquer trecho for desconhecido, o tipo de superfície será sinalizado como <em>parcialmente desconhecido</em>.</p>
+    <p><strong>Fonte de coordenadas:</strong> <a href="https://github.com/kelvins/municipios-brasileiros" target="_blank" rel="noopener">Municípios Brasileiros (kelvins)</a>. <strong>Tipo de piso:</strong> consultar os atributos <a href="https://wiki.openstreetmap.org/wiki/Key:surface" target="_blank" rel="noopener">surface=*</a> do OpenStreetMap e, quando necessário, verificar em imagens e fontes locais. <strong>Roteamento futuro:</strong> motores separados por modalidade; o percurso de carro não será simplesmente copiado para moto, bicicleta e caminhada.</p>
+    <p><strong>Não é um GPS:</strong> esta versão organiza pesquisas e registros. Ela ainda não calcula rotas reais automaticamente, não verifica permissões de tráfego, não distingue trechos asfaltados por reconhecimento remoto, nem contém horários ou valores de transporte coletivo.</p>
+  </section>
+</main>
+<script>
+(()=>{'use strict';
+const ORIGIN={ibge:'2924009',nome:'Paulo Afonso',uf:'BA',lat:-9.3983,lon:-38.2216},LIMIT=200,R=6371.0088;
+const UF={11:['RO','Rondônia'],12:['AC','Acre'],13:['AM','Amazonas'],14:['RR','Roraima'],15:['PA','Pará'],16:['AP','Amapá'],17:['TO','Tocantins'],21:['MA','Maranhão'],22:['PI','Piauí'],23:['CE','Ceará'],24:['RN','Rio Grande do Norte'],25:['PB','Paraíba'],26:['PE','Pernambuco'],27:['AL','Alagoas'],28:['SE','Sergipe'],29:['BA','Bahia'],31:['MG','Minas Gerais'],32:['ES','Espírito Santo'],33:['RJ','Rio de Janeiro'],35:['SP','São Paulo'],41:['PR','Paraná'],42:['SC','Santa Catarina'],43:['RS','Rio Grande do Sul'],50:['MS','Mato Grosso do Sul'],51:['MT','Mato Grosso'],52:['GO','Goiás'],53:['DF','Distrito Federal']};
+const URLS=['https://raw.githubusercontent.com/kelvins/municipios-brasileiros/master/csv/municipios.csv','https://cdn.jsdelivr.net/gh/kelvins/municipios-brasileiros@master/csv/municipios.csv'];
+const MODES=[['carro','Carro'],['moto','Moto'],['bicicleta','Bicicleta'],['ape','A pé']];
+const KEY='aurora-afora.rotas.v1';const $=id=>document.getElementById(id), esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=(v,d=2)=>Number(v).toLocaleString('pt-BR',{minimumFractionDigits:d,maximumFractionDigits:d});
+const rad=v=>v*Math.PI/180;let cities=[],records=[],currentCity=null,currentMode='carro',editId=null;
+function hav(lat,lon){const da=rad(lat-ORIGIN.lat),db=rad(lon-ORIGIN.lon);const t=Math.sin(da/2)**2+Math.cos(rad(ORIGIN.lat))*Math.cos(rad(lat))*Math.sin(db/2)**2;return 2*R*Math.atan2(Math.sqrt(t),Math.sqrt(Math.max(0,1-t)))}
+function parseCsv(raw){const lines=raw.replace(/^\uFEFF/,'').trim().split(/\r?\n/),h=lines.shift().split(',').map(x=>x.trim());const names=['codigo_ibge','nome','latitude','longitude','codigo_uf'];if(!names.every(x=>h.includes(x)))throw Error('CSV incompatível: cabeçalho não contém campos do levantamento geográfico.');const ix=Object.fromEntries(names.map(x=>[x,h.indexOf(x)]));let out=[];for(let l of lines){if(!l.trim())continue;let p=l.split(','),lat=Number(p[ix.latitude]),lon=Number(p[ix.longitude]),u=UF[Number(p[ix.codigo_uf])];if(!u||!Number.isFinite(lat)||!Number.isFinite(lon))continue;let d=hav(lat,lon);if(d<=LIMIT+1e-9)out.push({ibge:p[ix.codigo_ibge],nome:p[ix.nome],uf:u[0],estado:u[1],lat,lon,reta:d});}
+if(lines.filter(x=>x.trim()).length<5000)throw Error('Base nacional incompleta; esperado pelo menos 5.000 municípios.');out.sort((a,b)=>a.reta-b.reta||a.nome.localeCompare(b.nome,'pt-BR'));out.forEach((c,i)=>c.ordem=i+1);return out;}
+function state(msg,isError=false){$('status').className='alert '+(isError?'error':'ok');$('status').innerHTML=esc(msg)}
+function normalize(s){return String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()}
+function readSaved(){try{const data=JSON.parse(localStorage.getItem(KEY)||'[]');return Array.isArray(data)?data:[]}catch(e){return []}}
+records=readSaved();
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(records));return true}catch(e){alert('Não foi possível salvar neste navegador. Exporte o backup JSON e verifique o armazenamento disponível.');return false}}
+async function load(){let err='';for(let url of URLS){try{const r=await fetch(url,{cache:'no-cache',signal:AbortSignal.timeout(18000)});if(!r.ok)throw Error('HTTP '+r.status);receive(parseCsv(await r.text()));return}catch(e){err=e.message||String(e)}}state('Não foi possível acessar automaticamente a base de municípios: '+err+'. Você pode usar “Importar base CSV” com o CSV obtido no repositório Municípios Brasileiros.',true);$('cityRows').innerHTML='<tr><td colspan="6">Base não carregada. Importe o CSV local para continuar.</td></tr>'}
+function receive(cs){cities=cs.filter(c=>c.ibge!==ORIGIN.ibge&&!(normalize(c.nome)===normalize(ORIGIN.nome)&&c.uf===ORIGIN.uf));if(!cities.length)throw Error('Nenhum destino na área.');$('countCities').textContent=fmt(cities.length,0);$('countCombos').textContent=fmt(cities.length*MODES.length,0);$('exportCsv').disabled=false;let states=[...new Set(cities.map(c=>c.uf))].sort();$('uf').innerHTML='<option value="">Todos os estados</option>'+states.map(u=>'<option value="'+u+'">'+u+'</option>').join('');state('Base carregada: '+(cities.length+1)+' municípios dentro do raio (incluindo Paulo Afonso); '+cities.length+' destinos externos e '+cities.length*4+' combinações de modalidade. Distâncias rodoviárias permanecem pendentes até serem pesquisadas.');render();}
+function recordKey(c,mode){return records.filter(x=>x.destino_ibge===c.ibge&&x.modo===mode)}
+function badge(list){if(!list.length)return '<span class="pill none">Pendente</span>';if(list.some(x=>x.status==='verificada'))return '<span class="pill done">Verificada ('+list.filter(x=>x.status==='verificada').length+')</span>';return '<span class="pill partial">Em pesquisa ('+list.length+')</span>'}
+function render(){if(!cities.length)return;let query=normalize($('search').value),uf=$('uf').value,mode=$('modeFilter').value;let filtered=cities.filter(c=>(!query||normalize(c.nome+' '+c.uf+' '+c.estado+' '+c.ibge).includes(query))&&(!uf||uf===c.uf));$('tableMeta').textContent=filtered.length+' destinos exibidos de '+cities.length+'. Distâncias ordenadas somente em linha reta.';$('cityRows').innerHTML=filtered.map(c=>'<tr><td>'+c.ordem+'</td><td><strong>'+esc(c.nome)+'</strong></td><td>'+c.uf+'</td><td class="number">'+fmt(c.reta)+'</td><td>'+badge(recordKey(c,mode))+'</td><td><button class="button secondary" data-city="'+c.ibge+'">Registrar</button></td></tr>').join('')||'<tr><td colspan="6">Nenhum destino encontrado.</td></tr>';
+$('countRoutes').textContent=fmt(records.length,0);$('countChecked').textContent=fmt(records.filter(x=>x.status==='verificada').length,0);
+$('cityRows').querySelectorAll('[data-city]').forEach(b=>b.addEventListener('click',()=>chooseCity(b.dataset.city)));
+}
+function chooseCity(code){currentCity=cities.find(x=>x.ibge===code);if(!currentCity)return;currentMode=$('modeFilter').value;$('mode').value=currentMode;$('bench').hidden=false;$('selectedTitle').textContent=currentCity.nome+' / '+currentCity.uf;$('selectedMeta').textContent='IBGE '+currentCity.ibge+' · '+fmt(currentCity.reta)+' km em linha reta (somente referência geográfica).';editId=null;renderOptions();resetForm();$('bench').scrollIntoView({behavior:'smooth',block:'start'})}
+function renderOptions(){if(!currentCity)return;let options=recordKey(currentCity,currentMode);$('routeOptions').innerHTML=options.length?options.map(x=>'<button class="button secondary" data-id="'+esc(x.id)+'">'+esc(x.nome||'Alternativa sem nome')+' · '+(x.distancia!=null?fmt(x.distancia)+' km':'sem km')+' · '+esc(x.status)+'</button>').join(''):'<p class="small">Nenhuma rota cadastrada para esta modalidade.</p>';$('routeOptions').querySelectorAll('[data-id]').forEach(b=>b.addEventListener('click',()=>editRoute(b.dataset.id)))}
+function resetForm(){editId=null;$('routeForm').reset();$('formTitle').textContent='Nova alternativa';$('deleteRoute').classList.add('hidden');$('formMessage').textContent='';}
+function editRoute(id){let x=records.find(o=>o.id===id);if(!x)return;editId=id;$('routeForm').reset();for(let [k,v] of Object.entries(x)){let field=$('routeForm').elements.namedItem(k);if(field)field.value=v??''}$('formTitle').textContent='Editar: '+(x.nome||'Alternativa');$('deleteRoute').classList.remove('hidden');$('formMessage').textContent='';}
+function decimalField(f,name){let val=f.elements.namedItem(name).value;return val===''?null:Number(val)}
+function classify(x){let total=x.distancia;if(total==null||x.status==='inviavel')return 'não_classificada';let values=[x.asfalto,x.terra,x.outro,x.desconhecido].map(v=>v??0),nonzero=values.filter(v=>v>.001).length;if(values[3]>.001)return 'pavimento_parcialmente_desconhecido';if(nonzero===0)return 'não_identificado';if(nonzero>1)return 'híbrido';return ['asfalto','terra','outro_pavimento','desconhecido'][values.findIndex(v=>v>.001)]}
+function getForm(){const f=$('routeForm'),item={id:editId||'r-'+Date.now()+'-'+Math.random().toString(36).slice(2,9),origem_ibge:ORIGIN.ibge,origem_nome:ORIGIN.nome,origem_uf:ORIGIN.uf,destino_ibge:currentCity.ibge,destino_nome:currentCity.nome,destino_uf:currentCity.uf,modo:currentMode};
+for(let k of ['nome','prioridade','status','data','vias','observacoes','fonte','confianca'])item[k]=f.elements.namedItem(k).value.trim();for(let k of ['distancia','duracao','asfalto','terra','outro','desconhecido'])item[k]=decimalField(f,k);item.nome=item.nome||'Alternativa '+(recordKey(currentCity,currentMode).length+1);item.tipo_piso=classify(item);return item;}
+function validate(x){if(x.status==='verificada'&&(x.distancia==null||!x.data||!x.fonte))return 'Rotas verificadas exigem distância, data e fonte.';if(x.status==='inviavel'&&x.distancia!=null)return 'Marque distância vazia quando a rota for considerada inviável.';if(x.distancia!=null){if(x.distancia<=0)return 'Distância deve ser positiva.';let km=['asfalto','terra','outro','desconhecido'].reduce((a,k)=>a+(x[k]??0),0);if(km>x.distancia+.05)return 'Soma dos trechos por pavimento ultrapassa a distância total.';if(km>0&&Math.abs(km-x.distancia)>.1)return 'A soma dos trechos por pavimento precisa ser igual ao total (diferença máxima de 0,1 km). Use “Desconhecido” para trechos sem informação.';}
+return ''}
+function csvVal(v){let s=v==null?'':String(v).replace(/\r?\n/g,' ');return '"'+s.replace(/"/g,'""')+'"'}
+function csvNum(v,n=2){return v==null?'':Number(v).toFixed(n).replace('.',',')}
+function exportMatrix(){let head=['ordem_geografica','origem_ibge','origem','destino_ibge','destino','uf','linha_reta_km','modalidade','rota_id','alternativa','prioridade','status','distancia_rodoviaria_km','duracao_minutos','km_asfalto','km_terra','km_outro_pavimento','km_pavimento_desconhecido','classificacao_piso','vias','restricoes_observacoes','fonte','verificado_em','confianca'];let rows=[head];for(let c of cities)for(let [mode] of MODES){let found=recordKey(c,mode);if(!found.length)found=[{}];for(let x of found)rows.push([c.ordem,ORIGIN.ibge,ORIGIN.nome,c.ibge,c.nome,c.uf,csvNum(c.reta),mode,x.id||'',x.nome||'',x.prioridade||'',x.status||'pendente',csvNum(x.distancia),x.duracao??'',csvNum(x.asfalto),csvNum(x.terra),csvNum(x.outro),csvNum(x.desconhecido),x.tipo_piso||'não_avaliado',x.vias||'',x.observacoes||'',x.fonte||'',x.data||'',x.confianca||''])}let text='\uFEFF'+rows.map(r=>r.map(csvVal).join(';')).join('\r\n');saveFile('aurora_afora_matriz_rotas.csv','text/csv;charset=utf-8',text);}
+function saveFile(name,type,contents){let url=URL.createObjectURL(new Blob([contents],{type})),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000)}
+function exportBackup(){let obj={schema:'aurora-afora-rotas-v1',criado_em:new Date().toISOString(),origem:ORIGIN,raio_km:LIMIT,registros:records};saveFile('aurora_afora_rotas_backup.json','application/json;charset=utf-8',JSON.stringify(obj,null,2));}
+$('routeForm').addEventListener('submit',e=>{e.preventDefault();if(!currentCity)return;let obj=getForm(),error=validate(obj);if(error){$('formMessage').textContent=error;return}let ix=records.findIndex(x=>x.id===obj.id);if(ix>=0)records[ix]=obj;else records.push(obj);if(!persist())return;editId=obj.id;$('formTitle').textContent='Editar: '+obj.nome;$('deleteRoute').classList.remove('hidden');$('formMessage').textContent='Salvo neste navegador. Exporte um backup JSON.';render();renderOptions()});
+$('deleteRoute').addEventListener('click',()=>{if(!editId||!confirm('Excluir esta alternativa de rota?'))return;records=records.filter(x=>x.id!==editId);persist();resetForm();render();renderOptions()});
+$('newRoute').addEventListener('click',resetForm);$('mode').addEventListener('change',e=>{currentMode=e.target.value;editId=null;resetForm();renderOptions()});
+$('modeFilter').addEventListener('change',()=>{render();if(currentCity){currentMode=$('modeFilter').value;$('mode').value=currentMode;resetForm();renderOptions()}});
+$('search').addEventListener('input',render);$('uf').addEventListener('change',render);$('exportCsv').addEventListener('click',exportMatrix);$('exportJson').addEventListener('click',exportBackup);
+$('importJson').addEventListener('change',async e=>{let file=e.target.files?.[0];if(!file)return;try{let json=JSON.parse(await file.text());if(json.schema!=='aurora-afora-rotas-v1'||!Array.isArray(json.registros))throw Error('Formato de backup incompatível.');if(!confirm('Importar backup? Isso substituirá todas as rotas salvas neste navegador.'))return;records=json.registros;persist();resetForm();render();renderOptions();alert('Backup importado.')}catch(err){alert('Falha no backup: '+err.message)}finally{e.target.value=''}});
+$('importCities').addEventListener('change',async e=>{let file=e.target.files?.[0];if(!file)return;try{receive(parseCsv(await file.text()))}catch(err){state('Erro ao importar CSV: '+err.message,true)}finally{e.target.value=''}});
+$('reload').addEventListener('click',load);
+load();
+})();
+</script>
+</body></html>
